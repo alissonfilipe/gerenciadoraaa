@@ -13,6 +13,7 @@ class _MyAppState extends State<MyApp> {
   double saldo = 0;
   double dividaCartao = 0;
   double principalFonteRenda = 0;
+  double resultadoSubtracao = 0;
 
   TextEditingController saldoController = TextEditingController();
   TextEditingController dividaCartaoController = TextEditingController();
@@ -88,7 +89,8 @@ class _MyAppState extends State<MyApp> {
                 'Alterar Fonte de Renda',
                     () {
                   setState(() {
-                    principalFonteRenda = double.tryParse(principalFonteRendaController.text) ?? principalFonteRenda;
+                    principalFonteRenda =
+                        double.tryParse(principalFonteRendaController.text) ?? principalFonteRenda;
                     editandoPrincipalFonteRenda = false;
                   });
                 },
@@ -115,10 +117,25 @@ class _MyAppState extends State<MyApp> {
                     () {
                   setState(() {
                     editandoDataPrincipalFonteRenda = !editandoDataPrincipalFonteRenda;
-                    dataPrincipalFonteRendaController.text = _formatarData(dataPrincipalFonteRendaController.text);
+                    dataPrincipalFonteRendaController.text =
+                        _formatarData(dataPrincipalFonteRendaController.text);
                   });
                   _gerenciarFoco(editandoDataPrincipalFonteRenda, dataPrincipalFonteRendaFocus);
                 },
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    resultadoSubtracao = saldo - dividaCartao;
+                  });
+                },
+                child: Text('Subtrair Dívida do Cartão'),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'O que você realmente tem: \$${resultadoSubtracao.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 16),
               ),
             ],
           ),
@@ -127,7 +144,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget buildCampo(String labelText, TextEditingController controller, FocusNode focus, String hintText, VoidCallback onSave, bool editando, VoidCallback onToggle) {
+  Widget buildCampo(String labelText, TextEditingController controller, FocusNode focus, String hintText,
+      VoidCallback onSave, bool editando, VoidCallback onToggle) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
