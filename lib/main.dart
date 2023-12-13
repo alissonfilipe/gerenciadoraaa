@@ -222,21 +222,165 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class AtivosScreen extends StatelessWidget {
+
+
+
+// mudança de páginas, separar para ficar mais fácil de organizar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class AtivosScreen extends StatefulWidget {
+  @override
+  _AtivosScreenState createState() => _AtivosScreenState();
+}
+
+class _AtivosScreenState extends State<AtivosScreen> {
+  List<ItemFinanceiro> fontesDeRenda = [];
+  List<ItemFinanceiro> dividas = [];
+
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController valorController = TextEditingController();
+  TextEditingController descricaoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ativos e dívidas'),
+        title: Text('Ativos e Dívidas'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Voltar'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildColumn("Fontes de Renda", fontesDeRenda),
+            _buildColumn("Dívidas", dividas),
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildColumn(String title, List<ItemFinanceiro> items) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _showAddDialog(title, items);
+            },
+            child: Text('Adicionar $title'),
+          ),
+          SizedBox(height: 8),
+          Column(
+            children: items.map((item) => _buildItemCard(item)).toList(),
+          ),
+          SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemCard(ItemFinanceiro item) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: ListTile(
+        title: Text(item.nome),
+        subtitle: Text('Valor: \$${item.valor.toStringAsFixed(2)}\nDescrição: ${item.descricao}'),
+      ),
+    );
+  }
+
+  Future<void> _showAddDialog(String title, List<ItemFinanceiro> items) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Adicionar $title'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: nomeController,
+                  decoration: InputDecoration(labelText: 'Nome'),
+                ),
+                TextField(
+                  controller: valorController,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(labelText: 'Valor'),
+                ),
+                TextField(
+                  controller: descricaoController,
+                  decoration: InputDecoration(labelText: 'Descrição'),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (nomeController.text.isNotEmpty && valorController.text.isNotEmpty) {
+                  ItemFinanceiro novoItem = ItemFinanceiro(
+                    nome: nomeController.text,
+                    valor: double.parse(valorController.text),
+                    descricao: descricaoController.text,
+                  );
+
+                  setState(() {
+                    items.add(novoItem);
+                  });
+
+                  // Limpar os campos após adicionar
+                  nomeController.clear();
+                  valorController.clear();
+                  descricaoController.clear();
+
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Adicionar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ItemFinanceiro {
+  final String nome;
+  final double valor;
+  final String descricao;
+
+  ItemFinanceiro({
+    required this.nome,
+    required this.valor,
+    required this.descricao,
+  });
 }
