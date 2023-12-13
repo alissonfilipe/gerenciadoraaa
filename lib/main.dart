@@ -243,16 +243,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-
+//representa a tela de ativos e dívidas
 class AtivosScreen extends StatefulWidget {
   @override
   _AtivosScreenState createState() => _AtivosScreenState();
 }
 
+// classe para manter os estados dos itens finaceiros
 class _AtivosScreenState extends State<AtivosScreen> {
+  // fontes de renda ou dívidas são listas que armazenam itens financeiros
   List<ItemFinanceiro> fontesDeRenda = [];
   List<ItemFinanceiro> dividas = [];
 
+  //são controladores de textos associados aos campos do formulário de edição
   TextEditingController nomeController = TextEditingController();
   TextEditingController valorController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
@@ -276,50 +279,55 @@ class _AtivosScreenState extends State<AtivosScreen> {
     );
   }
 
-  Widget _buildColumn(String title, List<ItemFinanceiro> items) {
-    return Expanded(
-      child: Column(
+  //função privada que cria uma coluna para exibir fontes de renda ou dívidas.
+  Widget _buildColumn(String title, List<ItemFinanceiro> items) { // construir coluna
+    return Expanded( // para garantir que o conteúdo se expanda conforme o necessário
+      child: Column( // organiza os elementos verticalmente e esses elementos são listados em children
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          Text( // exibe o título da coluna com um estilo específico (style)
             title,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          ElevatedButton(
-            onPressed: () {
+          ElevatedButton( // quando clica no botão ele chama o _showAddDialog
+            onPressed: () { //função chamada quando o botão é presisonado
               _showAddDialog(title, items);
             },
-            child: Text('Adicionar $title'),
+            child: Text('Adicionar $title'), //conteúdo do botão
           ),
-          SizedBox(height: 8),
-          Column(
-            children: items.map((item) => _buildItemCard(item)).toList(),
+          SizedBox(height: 8), //adicona um espço de 8 pixels entre o botão e a lista
+          Column( //outra coluna com a lista dos itens finaceiros
+            children: items.map((item) => _buildItemCard(item)).toList(),//coloca cada item finaceiro
+            //em uma lista
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 16), //espaço vertical de 16 pixels
         ],
       ),
     );
   }
 
+  //cria um Card(cartão) que tem um ListTile
   Widget _buildItemCard(ItemFinanceiro item) {
-    return Card(
+    return Card( //Container com os sefuintes detalhes
       margin: EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
+      child: ListTile( //estruturas para exibir informações em uma única linha
         title: Text(item.nome),
         subtitle: Text('Valor: \$${item.valor.toStringAsFixed(2)}\nDescrição: ${item.descricao}'),
       ),
     );
   }
 
+  //exibe um diálogo modal para para adicionar um novo item finaceiro
   Future<void> _showAddDialog(String title, List<ItemFinanceiro> items) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Adicionar $title'),
-          content: SingleChildScrollView(
+        return AlertDialog( //caixa de diálogo
+          title: Text('Adicionar $title'), //Renda ou Dívidas
+          content: SingleChildScrollView( //caso o conteúdo for muito grande vai ter a rolagem
             child: Column(
               children: <Widget>[
+                //aqui são as três informações: nome, Valor e Descrição
                 TextField(
                   controller: nomeController,
                   decoration: InputDecoration(labelText: 'Nome'),
@@ -339,13 +347,14 @@ class _AtivosScreenState extends State<AtivosScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context); //fecha o diálogo sme fazer nenhuma alteração
               },
-              child: Text('Cancelar'),
+              child: Text('Cancelar'), //define o conteúdo do botão
             ),
             TextButton(
               onPressed: () {
                 if (nomeController.text.isNotEmpty && valorController.text.isNotEmpty) {
+                  //se n forem vazios
                   ItemFinanceiro novoItem = ItemFinanceiro(
                     nome: nomeController.text,
                     valor: double.parse(valorController.text),
@@ -361,7 +370,7 @@ class _AtivosScreenState extends State<AtivosScreen> {
                   valorController.clear();
                   descricaoController.clear();
 
-                  Navigator.pop(context);
+                  Navigator.pop(context); //fecha a tela atual e volta para a anterior
                 }
               },
               child: Text('Adicionar'),
@@ -374,11 +383,11 @@ class _AtivosScreenState extends State<AtivosScreen> {
 }
 
 class ItemFinanceiro {
-  final String nome;
+  final String nome; //não pode ser laterado após ser definido
   final double valor;
   final String descricao;
 
-  ItemFinanceiro({
+  ItemFinanceiro({ //valores obrigatorios ao criar o item
     required this.nome,
     required this.valor,
     required this.descricao,
