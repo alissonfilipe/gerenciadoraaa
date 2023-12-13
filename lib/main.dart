@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
               child: GestureDetector(
                 onTap: onToggle,
                 child: Text(
-                  '${controller.text.isEmpty ? "0.00" : controller.text}',
+                  '${controller.text.isEmpty ? "" : controller.text}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
