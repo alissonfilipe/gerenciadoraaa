@@ -37,107 +37,109 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Gerenciador Financeiro'),
         ),
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buildCampo(
-                'Saldo Atual: \$${saldo.toStringAsFixed(2)}',
-                saldoController,
-                saldoFocus,
-                'Novo Saldo',
-                    () {
-                  setState(() {
-                    saldo = double.tryParse(saldoController.text) ?? saldo;
-                    editandoSaldo = false;
-                  });
-                },
-                editandoSaldo,
-                    () {
-                  setState(() {
-                    editandoSaldo = !editandoSaldo;
-                  });
-                  _gerenciarFoco(editandoSaldo, saldoFocus);
-                },
-              ),
-              SizedBox(height: 16),
-              buildCampo(
-                'Dívida do Cartão de Crédito: \$${dividaCartao.toStringAsFixed(2)}',
-                dividaCartaoController,
-                dividaCartaoFocus,
-                'Nova Dívida do Cartão de Crédito',
-                    () {
-                  setState(() {
-                    dividaCartao = double.tryParse(dividaCartaoController.text) ?? dividaCartao;
-                    editandoDividaCartao = false;
-                  });
-                },
-                editandoDividaCartao,
-                    () {
-                  setState(() {
-                    editandoDividaCartao = !editandoDividaCartao;
-                  });
-                  _gerenciarFoco(editandoDividaCartao, dividaCartaoFocus);
-                },
-              ),
-              SizedBox(height: 16),
-              buildCampo(
-                'Principal Fonte de Renda: \$${principalFonteRenda.toStringAsFixed(2)}',
-                principalFonteRendaController,
-                principalFonteRendaFocus,
-                'Alterar Fonte de Renda',
-                    () {
-                  setState(() {
-                    principalFonteRenda =
-                        double.tryParse(principalFonteRendaController.text) ?? principalFonteRenda;
-                    editandoPrincipalFonteRenda = false;
-                  });
-                },
-                editandoPrincipalFonteRenda,
-                    () {
-                  setState(() {
-                    editandoPrincipalFonteRenda = !editandoPrincipalFonteRenda;
-                  });
-                  _gerenciarFoco(editandoPrincipalFonteRenda, principalFonteRendaFocus);
-                },
-              ),
-              SizedBox(height: 16),
-              buildCampo(
-                'Data da Principal Fonte de Renda: ${_formatarData(dataPrincipalFonteRendaController.text)}',
-                dataPrincipalFonteRendaController,
-                dataPrincipalFonteRendaFocus,
-                'Alterar Data',
-                    () {
-                  setState(() {
-                    editandoDataPrincipalFonteRenda = false;
-                  });
-                },
-                editandoDataPrincipalFonteRenda,
-                    () {
-                  setState(() {
-                    editandoDataPrincipalFonteRenda = !editandoDataPrincipalFonteRenda;
-                    dataPrincipalFonteRendaController.text =
-                        _formatarData(dataPrincipalFonteRendaController.text);
-                  });
-                  _gerenciarFoco(editandoDataPrincipalFonteRenda, dataPrincipalFonteRendaFocus);
-                },
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    resultadoSubtracao = saldo - dividaCartao;
-                  });
-                },
-                child: Text('Subtrair Dívida do Cartão'),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'O que você realmente tem: \$${resultadoSubtracao.toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 16),
-              ),
-            ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                buildCampo(
+                  'Saldo Atual: \$${saldo.toStringAsFixed(2)}',
+                  saldoController,
+                  saldoFocus,
+                  'Novo Saldo',
+                      () {
+                    setState(() {
+                      saldo = double.tryParse(saldoController.text) ?? saldo;
+                      editandoSaldo = false;
+                    });
+                  },
+                  editandoSaldo,
+                      () {
+                    setState(() {
+                      editandoSaldo = !editandoSaldo;
+                    });
+                    _gerenciarFoco(editandoSaldo, saldoFocus);
+                  },
+                ),
+                SizedBox(height: 16),
+                buildCampo(
+                  'Dívida do Cartão de Crédito: \$${dividaCartao.toStringAsFixed(2)}',
+                  dividaCartaoController,
+                  dividaCartaoFocus,
+                  'Nova Dívida do Cartão de Crédito',
+                      () {
+                    setState(() {
+                      dividaCartao = double.tryParse(dividaCartaoController.text) ?? dividaCartao;
+                      editandoDividaCartao = false;
+                    });
+                  },
+                  editandoDividaCartao,
+                      () {
+                    setState(() {
+                      editandoDividaCartao = !editandoDividaCartao;
+                    });
+                    _gerenciarFoco(editandoDividaCartao, dividaCartaoFocus);
+                  },
+                ),
+                SizedBox(height: 16),
+                buildCampo(
+                  'Principal Fonte de Renda: \$${principalFonteRenda.toStringAsFixed(2)}',
+                  principalFonteRendaController,
+                  principalFonteRendaFocus,
+                  'Alterar Fonte de Renda',
+                      () {
+                    setState(() {
+                      principalFonteRenda =
+                          double.tryParse(principalFonteRendaController.text) ?? principalFonteRenda;
+                      editandoPrincipalFonteRenda = false;
+                    });
+                  },
+                  editandoPrincipalFonteRenda,
+                      () {
+                    setState(() {
+                      editandoPrincipalFonteRenda = !editandoPrincipalFonteRenda;
+                    });
+                    _gerenciarFoco(editandoPrincipalFonteRenda, principalFonteRendaFocus);
+                  },
+                ),
+                SizedBox(height: 16),
+                buildCampo(
+                  'Data da Principal Fonte de Renda: ${_formatarData(dataPrincipalFonteRendaController.text)}',
+                  dataPrincipalFonteRendaController,
+                  dataPrincipalFonteRendaFocus,
+                  'Alterar Data',
+                      () {
+                    setState(() {
+                      editandoDataPrincipalFonteRenda = false;
+                    });
+                  },
+                  editandoDataPrincipalFonteRenda,
+                      () {
+                    setState(() {
+                      editandoDataPrincipalFonteRenda = !editandoDataPrincipalFonteRenda;
+                      dataPrincipalFonteRendaController.text =
+                          _formatarData(dataPrincipalFonteRendaController.text);
+                    });
+                    _gerenciarFoco(editandoDataPrincipalFonteRenda, dataPrincipalFonteRendaFocus);
+                  },
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      resultadoSubtracao = saldo - dividaCartao;
+                    });
+                  },
+                  child: Text('Subtrair Dívida do Cartão'),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'O que você realmente tem: \$${resultadoSubtracao.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
           ),
         ),
       ),
